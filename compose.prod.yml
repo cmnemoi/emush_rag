@@ -1,0 +1,8 @@
+services:
+  app:
+    image: cmnemoi/emush_rag_api:latest
+    ports:
+    - mode: ingress
+      target: 8000
+      published: 8000
+      protocol: tcp
