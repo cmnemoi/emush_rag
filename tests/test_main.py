@@ -1,5 +1,11 @@
-from emush_rag.main import hello_world
+from fastapi.testclient import TestClient
+
+from emush_rag.main import app
+
+client = TestClient(app)
 
 
-def test_hello_world():
-    assert hello_world() == "Hello, World!"
+def test_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello World"}

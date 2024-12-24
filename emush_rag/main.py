@@ -1,2 +1,8 @@
-def hello_world() -> str:
-    return "Hello, World!"
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
