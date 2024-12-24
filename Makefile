@@ -11,6 +11,12 @@ check-lint:
 check-types:
 	uv run mypy .
 
+docker-build:
+	docker build -t cmnemoi/emush_rag_api:latest .
+
+docker-run:
+	docker run -p 8000:8000 cmnemoi/emush_rag_api:latest
+
 install:
 	uv lock --locked
 	uv sync --locked --group dev --group lint --group test

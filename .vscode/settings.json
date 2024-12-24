@@ -10,6 +10,14 @@
         {
             "splitTerminals": [
                 {
+                    "name": "watch api",
+                    "commands": ["uv run fastapi dev emush_rag/main.py --reload --host 127.0.0.1 --port 8000"]
+                },
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
                     "name": "watch tests",
                     "commands": ["uv run ptw . --clear --now"]
                 },
