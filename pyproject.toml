@@ -3,7 +3,7 @@ name = "emush-rag"
 version = "0.0.0"
 description = "A RAG-based API to answer questions about eMush."
 readme = "README.md"
-requires-python = ">=3.13,<3.14"
+requires-python = ">=3.12,<3.13"
 license = "AGPL-3.0-or-later"
 authors = [
     {name = "Charles-Meldhine Madi Mnemoi", email = "charlesmeldhine.madimnemoi@gmail.com"}
@@ -17,6 +17,8 @@ classifiers = [
 
 dependencies = [
     "fastapi[standard]>=0.115.6",
+    "typer>=0.15.1",
+    "chromadb>=0.6.0",
 ]
 
 [project.urls]
@@ -24,6 +26,9 @@ dependencies = [
 Changelog = "https://github.com/cmnemoi/emush_rag/blob/main/CHANGELOG.md"
 Homepage = "https://github.com/cmnemoi/emush_rag/"
 Repository = "https://github.com/cmnemoi/emush_rag/"
+
+[project.scripts]
+index-documents = "emush_rag.cli.index_documents:main"
 
 [dependency-groups]
 dev = [
@@ -34,6 +39,7 @@ lint = [
     "mypy>=1.13.0",
     "pytest-mypy>=0.10.3",
     "ruff>=0.8.0",
+    "types-tqdm>=4.67.0.20241221",
 ]
 test = [
     "pytest>=8.3.3",
