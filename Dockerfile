@@ -1,5 +1,5 @@
 # Step 1: Build the application
-FROM python:3.13-slim AS builder
+FROM python:3.12-slim AS builder
 COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /uvx /bin/
 
 # Change the working directory to the `app` directory
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-editable
 
 # Step 2: Run the application
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 # Copy the environment, but not the source code
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
@@ -27,4 +27,4 @@ COPY --from=builder --chown=app:app /app/.venv /app/.venv
 EXPOSE 8000
 
 # Run the application
-CMD ["/app/.venv/bin/uvicorn", "emush_rag.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/.venv/bin/uvicorn", "emush_rag.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
