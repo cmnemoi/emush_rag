@@ -28,7 +28,7 @@ class OpenAILLMClient(LLMClient):
     TEMPERATURE = 0
 
     def __init__(self, model: str):
-        self.client = OpenAI(base_url="https://openrouter.ai/api/v1")
+        self.client = OpenAI()
         self.model = model
 
     def complete(self, messages: List[ChatMessage]) -> str:

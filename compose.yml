@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+    - mode: ingress
+      target: 8000
+      published: 8000
+      protocol: tcp

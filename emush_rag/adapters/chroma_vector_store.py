@@ -1,7 +1,8 @@
 from typing import Dict, Union, cast
 
-import chromadb
-from chromadb.api.types import QueryResult
+from chromadb import PersistentClient
+from chromadb.api.types import EmbeddingFunction, QueryResult
+from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
 from emush_rag.models.document import Document, DocumentMetadata
 from emush_rag.ports.vector_store import VectorStore
@@ -10,9 +11,16 @@ ChromaMetadata = Dict[str, Union[str, int, float, bool]]
 
 
 class ChromaVectorStore(VectorStore):
-    def __init__(self, persist_directory: str, collection_name: str):
-        self.client = chromadb.PersistentClient(path=persist_directory)
-        self.collection = self.client.get_or_create_collection(collection_name)
+    def __init__(
+        self,
+        persist_directory: str,
+        collection_name: str,
+        embedding_function: EmbeddingFunction | None = DefaultEmbeddingFunction(),
+    ):
+        self.client = PersistentClient(path=persist_directory)
+        self.collection = self.client.get_or_create_collection(
+            name=collection_name, embedding_function=embedding_function
+        )
 
     def index_documents(self, documents: list[Document]) -> None:
         if not documents:
