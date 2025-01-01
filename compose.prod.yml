@@ -7,3 +7,5 @@ services:
       published: 8000
       protocol: tcp
     restart: unless-stopped
+    environment:
+      OPENAI_API_KEY: $OPENAI_API_KEY
