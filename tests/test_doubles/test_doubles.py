@@ -23,8 +23,8 @@ class FakeVectorStore(VectorStore):
         self.indexed_documents.extend(documents)
         self.nb_calls += 1
 
-    def get_relevant_documents(self, query: str) -> List[Document]:
-        return self.documents_to_return
+    def get_relevant_documents(self, query: str, max_relevant_documents: int) -> List[Document]:
+        return self.documents_to_return[:max_relevant_documents]
 
     def should_be_called_times(self, times: int):
         assert self.nb_calls == times

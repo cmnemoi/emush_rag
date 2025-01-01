@@ -12,6 +12,10 @@ config = Config()
 
 @app.command()
 def main(
+    batch_size: int = typer.Option(config.indexation_batch_size, help="Number of documents to index at once"),
+    nb_characters_per_document: int = typer.Option(
+        config.indexation_nb_characters_per_document, help="Number of characters per document"
+    ),
     data_dir: str = typer.Option(config.data_directory, help="Path to directory containing documents to index"),
     chroma_persist_dir: str = config.chroma_db_directory,
     collection_name: str = config.collection_name,
@@ -26,6 +30,8 @@ def main(
     index_documents_usecase = IndexDocuments(
         document_reader=document_reader,
         vector_store=vector_store,
+        batch_size=batch_size,
+        nb_characters_per_document=nb_characters_per_document,
     )
     index_documents_usecase.execute()
 

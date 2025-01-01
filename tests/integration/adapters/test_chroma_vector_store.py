@@ -30,7 +30,7 @@ class TestChromaVectorStore:
         documents = self._given_sample_documents()
         self._when_indexing_documents(documents)
 
-        relevant_documents = self._when_getting_relevant_documents("test query")
+        relevant_documents = self._when_getting_relevant_documents("test query", 2)
 
         self._then_documents_should_be_valid(relevant_documents)
         self._then_documents_should_match_original(relevant_documents, documents)
@@ -55,8 +55,8 @@ class TestChromaVectorStore:
     def _when_indexing_documents(self, documents: list[Document]) -> None:
         self.store.index_documents(documents)
 
-    def _when_getting_relevant_documents(self, query: str) -> list[Document]:
-        return self.store.get_relevant_documents(query)
+    def _when_getting_relevant_documents(self, query: str, max_relevant_documents: int) -> list[Document]:
+        return self.store.get_relevant_documents(query, max_relevant_documents)
 
     def _then_stored_documents_should_match(self, expected_documents: list[Document]) -> None:
         actual_documents = self.store.get_all_documents()

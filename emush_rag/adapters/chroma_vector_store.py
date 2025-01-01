@@ -32,8 +32,8 @@ class ChromaVectorStore(VectorStore):
             ids=[document.generate_id() for document in documents],
         )
 
-    def get_relevant_documents(self, query: str) -> list[Document]:
-        query_results = self._query_collection(query)
+    def get_relevant_documents(self, query: str, max_relevant_documents: int) -> list[Document]:
+        query_results = self._query_collection(query, max_relevant_documents)
         if not self._has_valid_results(query_results):
             return []
         return self._create_documents_from_results(query_results)
@@ -51,10 +51,10 @@ class ChromaVectorStore(VectorStore):
             for content, metadata in zip(results["documents"], results["metadatas"])
         ]
 
-    def _query_collection(self, query: str) -> QueryResult:
+    def _query_collection(self, query: str, max_relevant_documents: int) -> QueryResult:
         return self.collection.query(
             query_texts=[query],
-            n_results=5,
+            n_results=max_relevant_documents,
         )
 
     def _has_valid_results(self, results: QueryResult) -> bool:

@@ -15,7 +15,7 @@ class TestAnswerUserQuestion:
         chat_history: list[ChatMessage] = []
 
         # When
-        response = self.usecase.execute(question=question, chat_history=chat_history)
+        response = self.usecase.execute(question=question, chat_history=chat_history, max_relevant_documents=1)
 
         # Then
-        assert response == "eMush is the greatest space opera."
+        assert response == ("eMush is the greatest space opera.", [])

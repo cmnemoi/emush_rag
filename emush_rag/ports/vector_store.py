@@ -11,5 +11,5 @@ class VectorStore(ABC):
         pass
 
     @abstractmethod
-    def get_relevant_documents(self, query: str) -> list[Document]:
+    def get_relevant_documents(self, query: str, max_relevant_documents: int) -> list[Document]:
         pass

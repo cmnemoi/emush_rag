@@ -19,9 +19,14 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.post("/api/questions", response_model=QuestionResponse)
+@app.post(
+    path="/api/questions",
+    response_model=QuestionResponse,
+)
 async def answer_question(
     request: QuestionRequest, usecase: AnswerUserQuestion = Depends(answer_user_question)
 ) -> QuestionResponse:
-    answer = usecase.execute(request.question, request.chat_history)
-    return QuestionResponse(answer=answer)
+    answer, retrieved_documents = usecase.execute(
+        request.question, request.chat_history, config.max_relevant_documents
+    )
+    return QuestionResponse(answer=answer, retrieved_documents=retrieved_documents)
