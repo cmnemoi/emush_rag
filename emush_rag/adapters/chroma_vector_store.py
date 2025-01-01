@@ -1,6 +1,7 @@
 from typing import Dict, Union, cast
 
 import chromadb
+from chromadb.api.types import QueryResult
 
 from emush_rag.models.document import Document, DocumentMetadata
 from emush_rag.ports.vector_store import VectorStore
@@ -23,6 +24,12 @@ class ChromaVectorStore(VectorStore):
             ids=[document.generate_id() for document in documents],
         )
 
+    def get_relevant_documents(self, query: str) -> list[Document]:
+        query_results = self._query_collection(query)
+        if not self._has_valid_results(query_results):
+            return []
+        return self._create_documents_from_results(query_results)
+
     def get_all_documents(self) -> list[Document]:
         results = self.collection.get()
         if not results["documents"] or not results["metadatas"]:
@@ -35,3 +42,34 @@ class ChromaVectorStore(VectorStore):
             )
             for content, metadata in zip(results["documents"], results["metadatas"])
         ]
+
+    def _query_collection(self, query: str) -> QueryResult:
+        return self.collection.query(
+            query_texts=[query],
+            n_results=5,
+        )
+
+    def _has_valid_results(self, results: QueryResult) -> bool:
+        return bool(
+            results["documents"]
+            and results["metadatas"]
+            and len(results["documents"]) > 0
+            and len(results["metadatas"]) > 0
+        )
+
+    def _create_documents_from_results(self, results: QueryResult) -> list[Document]:
+        if not self._has_valid_results(results):
+            return []
+
+        documents = results["documents"][0] if results["documents"] else []
+        metadatas = results["metadatas"][0] if results["metadatas"] else []
+        return [
+            self._create_document(content, cast(ChromaMetadata, metadata))
+            for content, metadata in zip(documents, metadatas)
+        ]
+
+    def _create_document(self, content: str, metadata: ChromaMetadata) -> Document:
+        return Document(
+            content=content,
+            metadata=cast(DocumentMetadata, metadata),
+        )

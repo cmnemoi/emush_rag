@@ -1,9 +1,15 @@
-from typing import Protocol
+from abc import ABC, abstractmethod
 
 from emush_rag.models.document import Document
 
 
-class VectorStore(Protocol):
+class VectorStore(ABC):
     """Vector store interface. This is where we will store our documents for them being used by the RAG model."""
 
-    def index_documents(self, documents: list[Document]) -> None: ...
+    @abstractmethod
+    def index_documents(self, documents: list[Document]) -> None:
+        pass
+
+    @abstractmethod
+    def get_relevant_documents(self, query: str) -> list[Document]:
+        pass
