@@ -6,3 +6,4 @@ services:
       target: 8000
       published: 8000
       protocol: tcp
+    restart: unless-stopped
