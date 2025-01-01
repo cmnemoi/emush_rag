@@ -38,4 +38,5 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd ~/www
-            docker stack deploy -c compose.yaml emush_rag_api
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY_PROD }}" > .env
+            env $(cat .env) docker stack deploy -c compose.yaml emush_rag_api
