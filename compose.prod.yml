@@ -22,7 +22,7 @@ services:
       target: 8000
       protocol: tcp
     volumes:
-      - ./chroma:/chroma/chroma
+    - ./chroma:/chroma/chroma
     networks:
       - emush_rag
 
