@@ -3,6 +3,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+from chromadb import PersistentClient
 from click.testing import Result
 from typer.testing import CliRunner
 
@@ -48,7 +49,7 @@ class TestIndexDocumentsCLI:
 
         # And documents should be stored in Chroma with the custom collection name
         vector_store = ChromaVectorStore(
-            persist_directory=str(self.chroma_persist_dir),
+            client=PersistentClient(path=self.temp_dir),
             collection_name=custom_collection_name,
         )
         assert vector_store.collection.name == custom_collection_name
@@ -104,7 +105,7 @@ class TestIndexDocumentsCLI:
 
     def _get_indexed_documents(self, collection_name: str) -> list:
         vector_store = ChromaVectorStore(
-            persist_directory=str(self.chroma_persist_dir),
+            client=PersistentClient(path=str(self.chroma_persist_dir)),
             collection_name=collection_name,
         )
         return vector_store.get_all_documents()

@@ -11,7 +11,7 @@
             "splitTerminals": [
                 {
                     "name": "watch api",
-                    "commands": ["uv run fastapi dev emush_rag/api/main.py --reload --host 127.0.0.1 --port 8000"]
+                    "commands": ["docker compose up --watch"]
                 },
             ]
         },

@@ -14,3 +14,5 @@ class Config:
     indexation_nb_characters_per_document: int = 1_000
     max_relevant_documents: int = 5
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY")
+    vector_store_url: str = os.getenv("VECTOR_STORE_URL", default="vector_store")
+    vector_store_port: int = int(os.getenv("VECTOR_STORE_PORT", default=8000))

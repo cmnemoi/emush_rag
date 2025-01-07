@@ -1,6 +1,8 @@
 import shutil
 import tempfile
 
+from chromadb import PersistentClient
+
 from emush_rag.adapters.chroma_vector_store import ChromaVectorStore
 from emush_rag.models.document import Document, DocumentMetadata
 
@@ -9,7 +11,7 @@ class TestChromaVectorStore:
     def setup_method(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.store = ChromaVectorStore(
-            persist_directory=self.temp_dir,
+            client=PersistentClient(path=self.temp_dir),
             collection_name="my_collection",
         )
 

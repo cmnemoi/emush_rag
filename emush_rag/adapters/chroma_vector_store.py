@@ -1,23 +1,26 @@
 from typing import Dict, Union, cast
 
-from chromadb import PersistentClient
+from chromadb.api import ClientAPI
 from chromadb.api.types import EmbeddingFunction, QueryResult
 from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
+from emush_rag.config import Config
 from emush_rag.models.document import Document, DocumentMetadata
 from emush_rag.ports.vector_store import VectorStore
 
 ChromaMetadata = Dict[str, Union[str, int, float, bool]]
 
+config = Config()
+
 
 class ChromaVectorStore(VectorStore):
     def __init__(
         self,
-        persist_directory: str,
+        client: ClientAPI,
         collection_name: str,
         embedding_function: EmbeddingFunction | None = DefaultEmbeddingFunction(),
     ):
-        self.client = PersistentClient(path=persist_directory)
+        self.client = client
         self.collection = self.client.get_or_create_collection(
             name=collection_name, embedding_function=embedding_function
         )

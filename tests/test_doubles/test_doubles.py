@@ -4,6 +4,7 @@ from emush_rag.models.document import Document
 from emush_rag.ports.document_reader import DocumentReader
 from emush_rag.ports.llm_client import ChatMessage, LLMClient
 from emush_rag.ports.vector_store import VectorStore
+from emush_rag.usecases.answer_user_question import AnswerUserQuestion
 
 
 class FakeVectorStore(VectorStore):
@@ -59,3 +60,10 @@ class InMemoryJsonDocumentReader(DocumentReader):
 
     def set_json_entries(self, json_entries: List[Document]) -> None:
         self.json_entries = json_entries
+
+
+def fake_answer_user_question():
+    vector_store = FakeVectorStore()
+    llm_client = FakeLLMClient()
+
+    return AnswerUserQuestion(llm_client=llm_client, vector_store=vector_store)

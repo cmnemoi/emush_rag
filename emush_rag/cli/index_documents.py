@@ -1,4 +1,5 @@
 import typer
+from chromadb import PersistentClient
 from chromadb.utils.embedding_functions.openai_embedding_function import OpenAIEmbeddingFunction
 
 from emush_rag.adapters.chroma_vector_store import ChromaVectorStore
@@ -23,7 +24,7 @@ def main(
     """Index JSON documents from data directorya into Chroma vector store"""
     document_reader = FileSystemJsonDocumentReader(data_directory=data_dir)
     vector_store = ChromaVectorStore(
-        persist_directory=chroma_persist_dir,
+        client=PersistentClient(path=chroma_persist_dir),
         collection_name=collection_name,
         embedding_function=OpenAIEmbeddingFunction(api_key=config.openai_api_key, model_name=config.embedding_model),
     )

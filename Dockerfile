@@ -24,7 +24,7 @@ FROM python:3.12-slim
 # Copy the environment, but not the source code
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
 
-EXPOSE 8000
+EXPOSE 3000
 
 # Run the application
-CMD ["/app/.venv/bin/uvicorn", "emush_rag.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/.venv/bin/uvicorn", "emush_rag.api.main:app", "--host", "0.0.0.0", "--port", "3000"]

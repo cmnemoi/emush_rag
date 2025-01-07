@@ -32,11 +32,17 @@ jobs:
       - 
         name: Deploy to server
         uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_PROD }}
+          VECTOR_STORE_URL: ${{ vars.VECTOR_STORE_URL }}
+          VECTOR_STORE_PORT: ${{ vars.VECTOR_STORE_PORT }}
         with:
           host: ${{ vars.SERVER_HOST }}
           username: ${{ vars.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd ~/www
-            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY_PROD }}" > .env
+            echo "OPENAI_API_KEY=${OPENAI_API_KEY}" > .env
+            echo "VECTOR_STORE_URL=${VECTOR_STORE_URL}" >> .env
+            echo "VECTOR_STORE_PORT=${VECTOR_STORE_PORT}" >> .env
             env $(cat .env) docker stack deploy -c compose.yaml emush_rag_api

@@ -1,3 +1,4 @@
+from chromadb import HttpClient
 from chromadb.utils.embedding_functions.openai_embedding_function import OpenAIEmbeddingFunction
 
 from emush_rag.adapters.chroma_vector_store import ChromaVectorStore
@@ -18,7 +19,10 @@ def _llm_client() -> OpenAILLMClient:
 
 def _vector_store(embedding_function: OpenAIEmbeddingFunction) -> ChromaVectorStore:
     return ChromaVectorStore(
-        persist_directory=config.chroma_db_directory,
+        client=HttpClient(
+            host=config.vector_store_url,
+            port=config.vector_store_port,
+        ),
         collection_name=config.collection_name,
         embedding_function=embedding_function,
     )
