@@ -21,9 +21,11 @@ services:
     - mode: ingress
       target: 8000
       protocol: tcp
+    volumes:
+      - ./chroma:/chroma/chroma
     networks:
       - emush_rag
 
 networks:
   emush_rag:
-    driver: bridge
+    driver: overlay
