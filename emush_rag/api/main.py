@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from emush_rag import __version__ as version
 from emush_rag.api.dependencies import answer_user_question
@@ -11,6 +12,15 @@ app = FastAPI(
     description="A RAG-based API to answer questions about eMush.",
     version=version,
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
 config = Config()
 
 

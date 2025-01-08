@@ -1,4 +1,4 @@
-import importlib
+import importlib.metadata
 
 from dotenv import load_dotenv
 

@@ -1,6 +1,6 @@
 [project]
 name = "emush-rag"
-version = "0.0.0"
+version = "0.0.1"
 description = "A RAG-based API to answer questions about eMush."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -20,6 +20,8 @@ dependencies = [
     "typer>=0.15.1",
     "chromadb>=0.6.0",
     "openai>=1.58.1",
+    "streamlit>=1.41.1",
+    "httpx>=0.28.1",
 ]
 
 [project.urls]
@@ -45,6 +47,7 @@ lint = [
 test = [
     "pytest>=8.3.3",
     "pytest-cov>=6.0.0",
+    "pytest-asyncio>=0.23.5",
 ]
 
 [tool.semantic_release]
