@@ -19,7 +19,7 @@
             "splitTerminals": [
                 {
                     "name": "watch tests",
-                    "commands": ["uv run ptw . --clear --now tests/unit tests/integration"]
+                    "commands": ["uv run ptw . --clear --now"]
                 },
             ]
         }

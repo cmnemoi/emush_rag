@@ -2,7 +2,8 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from emush_rag import __version__
-from emush_rag.api.dependencies import answer_user_question
+from emush_rag.api.dependencies import answer_user_question, rate_limiter
+from emush_rag.api.middleware import RateLimitMiddleware
 from emush_rag.api.models import QuestionRequest, QuestionResponse
 from emush_rag.config import Config
 from emush_rag.usecases.answer_user_question import AnswerUserQuestion
@@ -21,6 +22,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(
+    RateLimitMiddleware,
+    rate_limiter=rate_limiter(),
+)
+
 config = Config()
 
 
@@ -30,8 +36,8 @@ async def root():
 
 
 @app.get("/api/version")
-async def version():
-    return {"version": version}
+async def get_version():
+    return {"version": __version__}
 
 
 @app.post(
@@ -39,7 +45,8 @@ async def version():
     response_model=QuestionResponse,
 )
 async def answer_question(
-    request: QuestionRequest, usecase: AnswerUserQuestion = Depends(answer_user_question)
+    request: QuestionRequest,
+    usecase: AnswerUserQuestion = Depends(answer_user_question),
 ) -> QuestionResponse:
     answer, retrieved_documents = usecase.execute(
         request.question, request.chat_history, config.max_relevant_documents

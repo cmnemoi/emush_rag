@@ -1,9 +1,13 @@
+from datetime import datetime
+
 from chromadb import HttpClient
 from chromadb.utils.embedding_functions.openai_embedding_function import OpenAIEmbeddingFunction
 
 from emush_rag.adapters.chroma_vector_store import ChromaVectorStore
+from emush_rag.adapters.in_memory_rate_limiter import InMemoryRateLimiter
 from emush_rag.adapters.openai_llm_client import OpenAILLMClient
 from emush_rag.config import Config
+from emush_rag.ports.rate_limiter import RateLimiter
 from emush_rag.usecases.answer_user_question import AnswerUserQuestion
 
 config = Config()
@@ -11,6 +15,10 @@ config = Config()
 
 def answer_user_question() -> AnswerUserQuestion:
     return AnswerUserQuestion(llm_client=_llm_client(), vector_store=_vector_store(_embedding_function()))
+
+
+def rate_limiter(datetime_provider: type[datetime] = datetime) -> RateLimiter:  # type: ignore[assignment]
+    return InMemoryRateLimiter(max_requests=100, window_seconds=60, datetime_provider=datetime_provider)
 
 
 def _llm_client() -> OpenAILLMClient:
