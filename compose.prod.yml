@@ -1,10 +1,38 @@
 services:
+  reverse-proxy:
+    image: traefik:v3.3.1
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Setup Let's Encrypt certificates for HTTPS
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=cmnemoi@askneron.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # Redirect HTTP to HTTPS
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - "letsencrypt:/letsencrypt"
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - emush_rag
+
   app:
     image: cmnemoi/emush_rag_api:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`askneron.com`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
     ports:
     - mode: ingress
       target: 3000
-      published: 3000
       protocol: tcp
     env_file:
       - .env
@@ -29,3 +57,6 @@ services:
 networks:
   emush_rag:
     driver: overlay
+
+volumes:
+  letsencrypt:
