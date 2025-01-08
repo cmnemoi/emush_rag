@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from emush_rag import __version__ as version
+from emush_rag import __version__
 from emush_rag.api.dependencies import answer_user_question
 from emush_rag.api.models import QuestionRequest, QuestionResponse
 from emush_rag.config import Config
@@ -10,7 +10,7 @@ from emush_rag.usecases.answer_user_question import AnswerUserQuestion
 app = FastAPI(
     title="eMush RAG API",
     description="A RAG-based API to answer questions about eMush.",
-    version=version,
+    version=__version__,
 )
 
 app.add_middleware(
@@ -27,6 +27,11 @@ config = Config()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/api/version")
+async def version():
+    return {"version": version}
 
 
 @app.post(
