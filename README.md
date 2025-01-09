@@ -7,9 +7,9 @@
 A RAG-based API to answer questions about [eMush](https:/emush.eternaltwin.org/) using curated data.
 
 Stack: 
-- [FastAPI](https://fastapi.tiangolo.com/) for the API ;
+- [FastAPI](https://fastapi.tiangolo.com/) for the API, [pytest](https://docs.pytest.org/en/stable/) for automated testing ;
 - [Chroma](https://www.trychroma.com/) for the vector database allowing document retrieval ;
-- [Docker Swarm](https://docs.docker.com/engine/swarm/) for deployment on a self-managed [Digital Ocean server](https://www.digitalocean.com/products/droplets/) : https://askneron.com/docs
+- [Github Actions](https://github.com/features/actions) and [Docker Swarm](https://docs.docker.com/engine/swarm/) for automated deployment via a CI/CD pipeline on a self-managed [Digital Ocean server](https://www.digitalocean.com/products/droplets/) : https://askneron.com/docs
 
 # Contributing
 
@@ -23,7 +23,7 @@ Stack:
 ## Installation
 
 - Run the following command: `curl -sSL https://raw.githubusercontent.com/cmnemoi/emush_rag/main/clone-and-install | bash`
-- Add an OpenAI API key to the `.env` file.
+- Add an [OpenAI API key](https://platform.openai.com/api-keys) to the `.env` file.
 
 ## Usage
 
@@ -42,7 +42,7 @@ Or by accessing the API Swagger at http://askneron.localhost/docs.
 
 ## Indexing new documents
 
-To improve the answer of the RAG model, you can new documents by putting them in the `data` directory and then running the following command:
+To improve the answer of the RAG model, you can index new documents in the vector database by putting them in the `data` directory and running the following command:
 
 ```bash
 make index-documents
