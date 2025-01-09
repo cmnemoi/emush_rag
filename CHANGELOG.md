@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.1.0 (2025-01-09)
+
+### Features
+
+- Add a version endpoint
+  ([`34a83f4`](https://github.com/cmnemoi/emush_rag/commit/34a83f42b43346268fca31db8ad3eb5a1c7d5187))
+
+- Implement rate limiting and update API to enforce limits
+  ([`c525c78`](https://github.com/cmnemoi/emush_rag/commit/c525c786070e59add754255e7c65fb8b195f8986))
+
+
 ## v0.0.1 (2025-01-08)
 
 ### Bug Fixes
