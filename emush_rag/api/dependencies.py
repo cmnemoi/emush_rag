@@ -18,7 +18,11 @@ def answer_user_question() -> AnswerUserQuestion:
 
 
 def rate_limiter(datetime_provider: type[datetime] = datetime) -> RateLimiter:  # type: ignore[assignment]
-    return InMemoryRateLimiter(max_requests=100, window_seconds=60, datetime_provider=datetime_provider)
+    return InMemoryRateLimiter(
+        max_requests=config.rate_limit_max_requests,
+        window_seconds=config.rate_limit_window_seconds,
+        datetime_provider=datetime_provider,
+    )
 
 
 def _llm_client() -> OpenAILLMClient:
