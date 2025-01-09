@@ -4,7 +4,7 @@
 [![Continuous Delivery](https://github.com/cmnemoi/emush_rag/actions/workflows/create_github_release.yaml/badge.svg)](https://github.com/cmnemoi/emush_rag/actions/workflows/create_github_release.yaml)
 [![codecov](https://codecov.io/gh/cmnemoi/emush_rag/graph/badge.svg?token=FLAARH38AG)](https://codecov.io/gh/cmnemoi/emush_rag)
 
-A RAG-based API to answer questions about [eMush](https:/emush.eternaltwin.org/) using curated data.
+A RAG-based API to answer questions about [eMush](https://emush.eternaltwin.org/) using curated data.
 
 Stack: 
 - [FastAPI](https://fastapi.tiangolo.com/) for the API, [pytest](https://docs.pytest.org/en/stable/) for automated testing ;
