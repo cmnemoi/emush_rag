@@ -1,4 +1,4 @@
-all: setup-env-variables setup-git-hooks install check test 
+all: setup-env-variables setup-git-hooks install check test watch
 
 check: check-format check-lint check-types
 
@@ -11,14 +11,12 @@ check-lint:
 check-types:
 	uv run mypy .
 
-docker-build:
-	docker build -t cmnemoi/emush_rag_api:latest .
-
-docker-run:
-	docker run -p 8000:8000 cmnemoi/emush_rag_api:latest
+index-documents:
+	uv run emush_rag/cli/index_documents.py
+	scp -r ./chroma cmnemoi@askneron.com:~/www
 
 install:
-	uv lock --locked
+	uv lock
 	uv sync --locked --group dev --group lint --group test
 
 lint:
@@ -40,6 +38,9 @@ setup-git-hooks:
 	chmod +x hooks/post-commit
 	git config core.hooksPath hooks
 
+run:
+	docker compose up -d --watch
+
 test:
 	uv run pytest -v --cov=emush_rag --cov-report=xml
 
@@ -48,5 +49,8 @@ test-fast:
 
 upgrade-dependencies:
 	uv lock --upgrade
+
+watch:
+	docker compose up --watch
 
 .PHONY: all check check-format check-lint check-types install lint semantic-release setup-env-variables setup-git-hooks test upgrade-dependencies
