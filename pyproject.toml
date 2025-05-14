@@ -16,11 +16,11 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastapi[standard]>=0.115.6",
-    "typer>=0.15.1",
-    "chromadb>=0.6.0",
-    "openai>=1.58.1",
-    "streamlit>=1.41.1",
+    "fastapi[standard]>=0.115.12",
+    "typer>=0.15.4",
+    "chromadb==0.6.0",
+    "openai>=1.78.1",
+    "streamlit>=1.45.1",
     "httpx>=0.28.1",
 ]
 
@@ -36,18 +36,18 @@ index-documents = "emush_rag.cli.index_documents:main"
 [dependency-groups]
 dev = [
     "pytest-watcher>=0.4.3",
-    "python-semantic-release>=9.14.0",
+    "python-semantic-release>=9.21.1",
 ]
 lint = [
-    "mypy>=1.13.0",
-    "pytest-mypy>=0.10.3",
-    "ruff>=0.8.0",
-    "types-tqdm>=4.67.0.20241221",
+    "mypy>=1.15.0",
+    "pytest-mypy>=1.0.1",
+    "ruff>=0.11.9",
+    "types-tqdm>=4.67.0.20250513",
 ]
 test = [
-    "pytest>=8.3.3",
-    "pytest-cov>=6.0.0",
-    "pytest-asyncio>=0.23.5",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "pytest-asyncio>=0.26.0",
 ]
 
 [tool.semantic_release]
