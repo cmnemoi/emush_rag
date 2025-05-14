@@ -1,6 +1,44 @@
 # CHANGELOG
 
 
+## v0.1.1 (2025-05-14)
+
+### Bug Fixes
+
+- Update CORS middleware configuration
+  ([`79efcb4`](https://github.com/cmnemoi/emush_rag/commit/79efcb407c77bca0de0730f341b49d7370ceb1ff))
+
+- Restrict allowed origins to "https://askneron.netlify.app". - Add support for OPTIONS method and
+  expose headers. - Set max age for preflight requests to 3600 seconds.
+
+### Chores
+
+- Allow to get started more easily
+  ([`31b5ded`](https://github.com/cmnemoi/emush_rag/commit/31b5ded8794331e384ae0052a64c78f1c7cfd1c6))
+
+- Add make commands to run the API with docker compose ; - Add a make command to index new documents
+  in the vector store ; - Update README.
+
+- Remove unused dependencies
+  ([`8daa35f`](https://github.com/cmnemoi/emush_rag/commit/8daa35fdfdbaffd5448aa4429882543856c1189f))
+
+- Update dependencies
+  ([`466b7c2`](https://github.com/cmnemoi/emush_rag/commit/466b7c291849003891b1f7e8038be68bee527bd4))
+
+### Documentation
+
+- Fix broken link in README
+  ([`fe1620c`](https://github.com/cmnemoi/emush_rag/commit/fe1620c0de57b0dade148897e32a0a0ed1bd1ab3))
+
+- Update README with missing infos about stack and corrected typos
+  ([`d30dd3f`](https://github.com/cmnemoi/emush_rag/commit/d30dd3fadee683f14dd0a0445ca3685f7006ad79))
+
+### Refactoring
+
+- Use config class to setup rate limiting
+  ([`3c6a1a1`](https://github.com/cmnemoi/emush_rag/commit/3c6a1a10d312a17b5edce77b169179a1ce822c3b))
+
+
 ## v0.1.0 (2025-01-09)
 
 ### Features
