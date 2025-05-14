@@ -17,11 +17,8 @@ classifiers = [
 
 dependencies = [
     "fastapi[standard]>=0.115.12",
-    "typer>=0.15.4",
     "chromadb==0.6.0",
     "openai>=1.78.1",
-    "streamlit>=1.45.1",
-    "httpx>=0.28.1",
 ]
 
 [project.urls]
@@ -37,6 +34,7 @@ index-documents = "emush_rag.cli.index_documents:main"
 dev = [
     "pytest-watcher>=0.4.3",
     "python-semantic-release>=9.21.1",
+    "typer>=0.15.4",
 ]
 lint = [
     "mypy>=1.15.0",

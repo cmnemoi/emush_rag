@@ -1,4 +1,7 @@
-all: setup-env-variables setup-git-hooks install check test watch
+all: setup-env-variablessetup-git-hooks install check test build-watch
+
+build-watch:
+	docker compose up --build --watch
 
 check: check-format check-lint check-types
 
@@ -53,4 +56,4 @@ upgrade-dependencies:
 watch:
 	docker compose up --watch
 
-.PHONY: all check check-format check-lint check-types install lint semantic-release setup-env-variables setup-git-hooks test upgrade-dependencies
+.PHONY: all build-watch check check-format check-lint check-types install lint semantic-release setup-env-variables setup-git-hooks test upgrade-dependencies
