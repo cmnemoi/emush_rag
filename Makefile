@@ -1,4 +1,4 @@
-all: setup-env-variablessetup-git-hooks install check test build-watch
+all: setup-env-variables setup-git-hooks install check test build-watch
 
 build-watch:
 	docker compose up --build --watch
