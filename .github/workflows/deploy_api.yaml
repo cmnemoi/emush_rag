@@ -29,7 +29,16 @@ jobs:
         with:
           push: true
           tags: cmnemoi/emush_rag_api:latest
-      - 
+      -
+        name: Copy compose file to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: compose.prod.yml
+          target: ~/www
+      -
         name: Deploy to server
         uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17
         with:
@@ -41,4 +50,4 @@ jobs:
             echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY_PROD }}" > .env
             echo "VECTOR_STORE_URL=${{ vars.VECTOR_STORE_URL }}" >> .env
             echo "VECTOR_STORE_PORT=${{ vars.VECTOR_STORE_PORT }}" >> .env
-            env $(cat .env) docker stack deploy -c compose.yaml emush_rag_api
+            env $(cat .env) docker stack deploy -c compose.prod.yml emush_rag_api
