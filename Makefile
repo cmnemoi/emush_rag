@@ -45,10 +45,10 @@ run:
 	docker compose up -d --watch
 
 test:
-	uv run pytest -v --cov=emush_rag --cov-report=xml
+	uv run python -m pytest -v --cov=emush_rag --cov-report=xml
 
 test-fast:
-	uv run pytest -v tests/unit tests/integration
+	uv run python -m pytest -v tests/unit tests/integration
 
 upgrade-dependencies:
 	uv lock --upgrade

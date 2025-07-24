@@ -39,13 +39,13 @@ services:
       - "host.docker.internal:host-gateway"
 
   vector_store:
-    image: chromadb/chroma:0.6.0
+    image: chromadb/chroma:1.0.15
     ports:
     - mode: ingress
       target: 8000
       protocol: tcp
     volumes:
-    - ./chroma:/chroma/chroma
+    - ./chroma:/data
     restart: always
     networks:
       - emush_rag

@@ -1,9 +1,9 @@
 [project]
 name = "emush-rag"
-version = "0.1.1"
+version = "1.0.0"
 description = "A RAG-based API to answer questions about eMush."
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.13,<3.14"
 license = "AGPL-3.0-or-later"
 authors = [
     {name = "Charles-Meldhine Madi Mnemoi", email = "charlesmeldhine.madimnemoi@gmail.com"}
@@ -16,9 +16,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastapi[standard]>=0.115.12",
-    "chromadb==0.6.0",
-    "openai>=1.78.1",
+    "fastapi[standard]>=0.116.1",
+    "chromadb>=1.0.15",
+    "openai>=1.97.1",
 ]
 
 [project.urls]
@@ -33,20 +33,23 @@ index-documents = "emush_rag.cli.index_documents:main"
 [dependency-groups]
 dev = [
     "pytest-watcher>=0.4.3",
-    "python-semantic-release>=9.21.1",
-    "typer>=0.15.4",
+    "python-semantic-release>=10.2.0",
+    "typer>=0.16.0",
 ]
 lint = [
-    "mypy>=1.15.0",
+    "mypy>=1.17.0",
     "pytest-mypy>=1.0.1",
-    "ruff>=0.11.9",
-    "types-tqdm>=4.67.0.20250513",
+    "ruff>=0.12.5",
+    "types-tqdm>=4.67.0.20250516",
 ]
 test = [
-    "pytest>=8.3.5",
-    "pytest-cov>=6.1.1",
-    "pytest-asyncio>=0.26.0",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-asyncio>=1.1.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/"]
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]

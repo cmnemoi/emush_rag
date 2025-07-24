@@ -1,6 +1,6 @@
 # Step 1: Build the application
-FROM python:3.12-slim AS builder
-COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /uvx /bin/
+FROM python:3.13-slim AS builder
+COPY --from=ghcr.io/astral-sh/uv:0.8.2 /uv /uvx /bin/
 
 # Change the working directory to the `app` directory
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-editable
 
 # Step 2: Run the application
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 # Copy the environment, but not the source code
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
