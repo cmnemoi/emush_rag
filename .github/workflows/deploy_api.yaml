@@ -27,19 +27,19 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Build and push Docker API image
+        name: Build and push Docker app image
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: cmnemoi/emush_rag_api:latest
+          file: Dockerfile.app
       -
         name: Build and push Docker Grafana image
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: cmnemoi/emush_rag_grafana:latest
-          context: grafana
-          file: Dockerfile
+          file: Dockerfile.grafana
       -
         name: Copy compose file to server
         uses: appleboy/scp-action@v1
