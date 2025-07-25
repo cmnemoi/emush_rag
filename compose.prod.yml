@@ -16,7 +16,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080" # Traefik dashboard
     volumes:
       - "letsencrypt:/letsencrypt"
       - /var/run/docker.sock:/var/run/docker.sock
@@ -32,12 +31,13 @@ services:
       - "traefik.http.routers.app.tls.certresolver=myresolver"
     ports:
     - mode: ingress
-      target: 3000
+      target: 8080
       protocol: tcp
     env_file:
       - .env
     depends_on:
       - vector_store
+      - jaeger
     networks:
       - emush_rag
     extra_hosts:
@@ -51,8 +51,41 @@ services:
       protocol: tcp
     volumes:
     - ./chroma:/data
+    restart: always
     networks:
       - emush_rag
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.71.0
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 9411:9411
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    networks:
+      - emush_rag
+    restart: always
+
+  grafana:
+    image: grafana/grafana-oss:12.1.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.askneron.com`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    env_file:
+      - .env
+    depends_on:
+      - jaeger
+    networks:
+      - emush_rag
+    restart: always
 
 networks:
   emush_rag:
@@ -60,3 +93,4 @@ networks:
 
 volumes:
   letsencrypt:
+  grafana-data:

@@ -19,6 +19,9 @@ dependencies = [
     "fastapi[standard]>=0.116.1",
     "chromadb>=1.0.15",
     "openai>=1.97.1",
+    "opentelemetry-instrumentation-fastapi>=0.56b0",
+    "opentelemetry-instrumentation-openai>=0.43.1",
+    "opentelemetry-exporter-otlp>=1.35.0",
 ]
 
 [project.urls]

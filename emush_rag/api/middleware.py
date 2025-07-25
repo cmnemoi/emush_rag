@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
@@ -17,7 +19,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             if not self.rate_limiter.is_allowed(client_id):
                 return Response(
                     content='{"detail": "Too many requests"}',
-                    status_code=429,
+                    status_code=HTTPStatus.TOO_MANY_REQUESTS,
                     media_type="application/json",
                 )
             self.rate_limiter.record_request(client_id)

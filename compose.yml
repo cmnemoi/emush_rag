@@ -19,7 +19,7 @@ services:
       - "traefik.http.routers.app.rule=Host(`askneron.localhost`)"
     ports:
     - mode: ingress
-      target: 3000
+      target: 8080
       protocol: tcp
     restart: always
     develop:
@@ -33,10 +33,11 @@ services:
       - .env
     depends_on:
       - vector_store
+      - jaeger
     networks:
       - emush_rag
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - host.docker.internal:host-gateway
 
   vector_store:
     image: chromadb/chroma:1.0.15
@@ -50,6 +51,36 @@ services:
     networks:
       - emush_rag
 
+  jaeger:
+    image: jaegertracing/all-in-one:1.71.0
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 9411:9411
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    networks:
+      - emush_rag
+    restart: always
+
+  grafana:
+    image: grafana/grafana-oss:12.1.0
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    env_file:
+      - .env
+    depends_on:
+      - jaeger
+    networks:
+      - emush_rag
+    restart: always
+
 networks:
   emush_rag:
     driver: bridge
+
+volumes:
+  grafana-data:

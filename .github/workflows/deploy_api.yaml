@@ -50,6 +50,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd ~/www
+            echo "GF_SECURITY_ADMIN_PASSWORD=${{ secrets.GRAFANA_ADMIN_PASSWORD }}" >> .env
             echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY_PROD }}" > .env
             echo "VECTOR_STORE_URL=${{ vars.VECTOR_STORE_URL }}" >> .env
             echo "VECTOR_STORE_PORT=${{ vars.VECTOR_STORE_PORT }}" >> .env
