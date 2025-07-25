@@ -64,12 +64,13 @@ services:
     restart: always
 
   grafana:
-    image: grafana/grafana-oss:12.1.0
+    build:
+      context: grafana
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
     env_file:
       - .env
     depends_on:
