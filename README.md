@@ -10,6 +10,8 @@ Stack:
 - [FastAPI](https://fastapi.tiangolo.com/) for the API, [pytest](https://docs.pytest.org/en/stable/) for automated testing ;
 - [Chroma](https://www.trychroma.com/) for the vector database allowing document retrieval ;
 - [Github Actions](https://github.com/features/actions) and [Docker Swarm](https://docs.docker.com/engine/swarm/) for automated deployment via a CI/CD pipeline on a self-managed [Digital Ocean server](https://www.digitalocean.com/products/droplets/) : https://askneron.com/docs
+- [OpenTelemetry](https://opentelemetry.io/) for tracing and metrics (exported with [Jaeger](https://www.jaegertracing.io/)) ;
+- [Grafana](https://grafana.com/) for monitoring dashboards from OpenTelemetry signals.
 
 # Contributing
 
@@ -56,3 +58,9 @@ make index-documents
 # License
 
 The source code of this repository is licensed under the [AGPL-3.0-or-later License](LICENSE).
+
+# Screenshots
+
+![API docs with OpenAPI UI](./screenshots/api.png)
+![Grafana dashboard](./screenshots/dashboard.png)
+![Trace detail on Grafana](./screenshots/trace.png)
