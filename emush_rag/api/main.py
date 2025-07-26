@@ -22,12 +22,15 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://askneron.netlify.app"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-    max_age=3600,
+    allow_origins=[
+        "https://askneron.netlify.app",
+        "https://emush.eternaltwin.org",
+        "https://staging.emush.eternaltwin.org",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+    max_age=3_600,
 )
 
 app.add_middleware(
