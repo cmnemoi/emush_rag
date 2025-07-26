@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Config:
-    chat_model: str = "gpt-4o-mini"
+    chat_model: str = "gpt-4.1-mini"
     collection_name: str = "emush_rag_lite"
     chroma_db_directory: str = "chroma"
     data_directory: str = "data"
