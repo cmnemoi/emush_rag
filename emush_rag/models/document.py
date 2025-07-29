@@ -14,14 +14,15 @@ class Document:
     content: str
     metadata: DocumentMetadata
 
-    def length(self) -> int:
-        return len(self.content)
+    @staticmethod
+    def from_dict(dictionary: dict) -> "Document":
+        return Document(
+            content=dictionary["content"],
+            metadata={"title": dictionary["title"], "link": dictionary["link"], "source": dictionary["source"]},
+        )
 
     def generate_id(self) -> str:
-        return str(uuid.uuid5(uuid.NAMESPACE_DNS, self._hash()))
-
-    def _hash(self) -> str:
-        return str(hash(str(self._to_dict())))
+        return str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.__hash__())))
 
     def _to_dict(self) -> dict:
         return {
@@ -31,9 +32,5 @@ class Document:
             "source": self.metadata["source"],
         }
 
-    @staticmethod
-    def from_dict(dictionary: dict) -> "Document":
-        return Document(
-            content=dictionary["content"],
-            metadata={"title": dictionary["title"], "link": dictionary["link"], "source": dictionary["source"]},
-        )
+    def __hash__(self) -> int:
+        return hash(str(self._to_dict()))

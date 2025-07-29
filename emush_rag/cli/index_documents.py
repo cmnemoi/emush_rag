@@ -4,6 +4,9 @@ from chromadb.utils.embedding_functions.openai_embedding_function import OpenAIE
 
 from emush_rag.adapters.chroma_vector_store import ChromaVectorStore
 from emush_rag.adapters.file_system_json_document_reader import FileSystemJsonDocumentReader
+from emush_rag.adapters.langchain_recursive_character_document_splitter import (
+    LangchainRecursiveCharacterDocumentSplitter,
+)
 from emush_rag.config import Config
 from emush_rag.usecases.index_documents import IndexDocuments
 
@@ -31,8 +34,11 @@ def main(
     index_documents_usecase = IndexDocuments(
         document_reader=document_reader,
         vector_store=vector_store,
+        document_splitter=LangchainRecursiveCharacterDocumentSplitter(
+            chunk_size=nb_characters_per_document,
+            chunk_overlap=config.indexation_chunk_overlap,
+        ),
         batch_size=batch_size,
-        nb_characters_per_document=nb_characters_per_document,
     )
     index_documents_usecase.execute()
 

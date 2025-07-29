@@ -26,6 +26,7 @@ app.add_middleware(
         "https://askneron.netlify.app",
         "https://emush.eternaltwin.org",
         "https://staging.emush.eternaltwin.org",
+        "http://localhost:5173",
     ],
     allow_credentials=False,
     allow_methods=["GET", "POST"],

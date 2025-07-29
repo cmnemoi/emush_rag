@@ -14,6 +14,7 @@ class Config:
     rate_limit_window_seconds: int = 60
     indexation_batch_size: int = 100
     indexation_nb_characters_per_document: int = 1_000
+    indexation_chunk_overlap: int = 100
     max_relevant_documents: int = 5
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY")
     vector_store_url: str = os.getenv("VECTOR_STORE_URL", default="vector_store")
