@@ -27,7 +27,8 @@ class AnswerUserQuestion:
             return question
 
         conversation = [f"{message.role}: {message.content}" for message in chat_history]
-        conversation.append(f"user: {question}")
+        if f"user: {question}" not in conversation:
+            conversation.append(f"user: {question}")
 
         messages = [
             ChatMessage(
