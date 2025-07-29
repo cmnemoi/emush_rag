@@ -11,5 +11,5 @@ class ChatMessage:
 
 class LLMClient(ABC):
     @abstractmethod
-    def complete(self, messages: List[ChatMessage]) -> str:
+    def complete(self, system_prompt: str, messages: List[ChatMessage]) -> str:
         pass

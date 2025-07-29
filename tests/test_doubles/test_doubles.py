@@ -42,7 +42,7 @@ class FakeLLMClient(LLMClient):
         self.expected_response = expected_response
         self.expected_messages = expected_messages
 
-    def complete(self, messages: List[ChatMessage]) -> str:
+    def complete(self, system_prompt: str, messages: List[ChatMessage]) -> str:
         if self.expected_messages is not None:
             assert messages == self.expected_messages
         return self.expected_response

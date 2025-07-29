@@ -9,7 +9,6 @@ from openai.types.chat import (
 )
 
 from emush_rag.ports.llm_client import ChatMessage, LLMClient
-from emush_rag.prompts import SYSTEM_PROMPT, USER_PROMPT
 
 
 @dataclass
@@ -31,16 +30,15 @@ class OpenAILLMClient(LLMClient):
         self.client = OpenAI()
         self.model = model
 
-    def complete(self, messages: List[ChatMessage]) -> str:
-        formatted_messages = self._format_messages(messages)
+    def complete(self, system_prompt: str, messages: List[ChatMessage]) -> str:
+        formatted_messages = self._format_messages(system_prompt, messages)
         return self._get_completion_response(formatted_messages)
 
-    def _format_messages(self, messages: List[ChatMessage]) -> List[ChatCompletionMessageParam]:
+    def _format_messages(self, system_prompt: str, messages: List[ChatMessage]) -> List[ChatCompletionMessageParam]:
         if not messages:
             return []
 
         context = ""
-        chat_history = []
         question = ""
 
         for msg in messages:
@@ -49,10 +47,8 @@ class OpenAILLMClient(LLMClient):
                 context = msg.content
             elif role == "last_user":
                 question = msg.content
-            elif role in ["chat_user", "chat_assistant"]:
-                chat_history.append(self._format_chat_history_entry(msg))
 
-        return self._create_formatted_messages(context, question, chat_history)
+        return self._create_formatted_messages(system_prompt, context, question)
 
     def _get_completion_response(self, formatted_messages: List[ChatCompletionMessageParam]) -> str:
         response = self.client.chat.completions.create(
@@ -76,22 +72,15 @@ class OpenAILLMClient(LLMClient):
         return "unknown"
 
     def _create_formatted_messages(
-        self, context: str, question: str, chat_history: List[str]
+        self, system_prompt: str, context: str, question: str
     ) -> List[ChatCompletionMessageParam]:
         system_message = FormattedMessage(
             role="system",
-            content=SYSTEM_PROMPT.format(context=context),
+            content=system_prompt.format(context=context),
         )
         user_message = FormattedMessage(
             role="user",
-            content=USER_PROMPT.format(
-                question=question,
-                chat_history="\n".join(chat_history) if chat_history else "No chat history",
-            ),
+            content=question,
         )
 
         return [system_message.to_dict(), user_message.to_dict()]
-
-    def _format_chat_history_entry(self, message: ChatMessage) -> str:
-        prefix = "User" if message.role == "user" else "Assistant"
-        return f"{prefix}: {message.content}"
