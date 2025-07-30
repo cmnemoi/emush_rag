@@ -16,7 +16,7 @@ class AnswerUserQuestion:
 
         relevant_documents = self.vector_store.get_relevant_documents(reformulated_question, max_relevant_documents)
         return self.llm_client.complete(
-            SYSTEM_PROMPT.format(context=self._get_context(relevant_documents)),
+            SYSTEM_PROMPT.format(question=question, context=self._get_context(relevant_documents)),
             [
                 ChatMessage(role="user", content=reformulated_question),
             ],
@@ -37,7 +37,7 @@ class AnswerUserQuestion:
             ),
         ]
 
-        return self.llm_client.complete(REFORMULATION_PROMPT, messages)
+        return self.llm_client.complete(REFORMULATION_PROMPT.format(question=question), messages)
 
     def _get_context(self, relevant_documents: list[Document]) -> str:
         if not relevant_documents:
@@ -45,7 +45,7 @@ class AnswerUserQuestion:
 
         return "\n\n".join(
             [
-                f"[{document.metadata.get('source', 'unknown source')}]\n{document.content}"
+                f"Source: {document.metadata.get('source', 'unknown source')}\n\nContent: {document.content}"
                 for document in relevant_documents
             ]
         )
