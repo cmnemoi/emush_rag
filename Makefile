@@ -47,6 +47,9 @@ setup-git-hooks:
 run:
 	docker compose up -d --watch
 
+run-lite:
+	docker compose -f compose.dev.yml up --watch
+
 test:
 	uv run python -m pytest -v --cov=emush_rag --cov-report=xml
 
