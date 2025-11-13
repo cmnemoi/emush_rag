@@ -1,13 +1,11 @@
-version: "3.9"
-
 services:
   reverse-proxy:
     image: traefik:v3.3.1
     command:
       - "--api.insecure=true"
-      - "--providers.swarm=true"
-      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
-      - "--providers.swarm.exposedbydefault=false"
+      - "--providers.docker=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
       # HTTP / HTTPS entrypoints
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
@@ -36,18 +34,14 @@ services:
       - emush_rag
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    ports:
-      - mode: ingress
-        target: 8080
-        protocol: tcp
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.swarm.network=emush_rag"
         - "traefik.http.routers.app.rule=Host(`askneron.com`)"
         - "traefik.http.routers.app.entrypoints=websecure"
         - "traefik.http.routers.app.tls.certresolver=myresolver"
         - "traefik.http.services.app.loadbalancer.server.port=8080"
+        - "traefik.docker.network=emush_rag"
       restart_policy:
         condition: on-failure
 
@@ -58,10 +52,6 @@ services:
     networks:
       - emush_rag
     restart: unless-stopped
-    ports:
-      - mode: ingress
-        target: 8000
-        protocol: tcp
 
   jaeger:
     image: jaegertracing/all-in-one:1.71.0
@@ -70,16 +60,6 @@ services:
     networks:
       - emush_rag
     restart: unless-stopped
-    ports:
-      - mode: ingress
-        target: 4317
-        protocol: tcp
-      - mode: ingress
-        target: 4318
-        protocol: tcp
-      - mode: ingress
-        target: 9411
-        protocol: tcp
 
   grafana:
     image: cmnemoi/emush_rag_grafana:latest
@@ -92,18 +72,14 @@ services:
     networks:
       - emush_rag
     restart: unless-stopped
-    ports:
-      - mode: ingress
-        target: 3000
-        protocol: tcp
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.swarm.network=emush_rag"
         - "traefik.http.routers.grafana.rule=Host(`grafana.askneron.com`)"
         - "traefik.http.routers.grafana.entrypoints=websecure"
         - "traefik.http.routers.grafana.tls.certresolver=myresolver"
         - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+        - "traefik.docker.network=emush_rag"
 
 networks:
   emush_rag:
