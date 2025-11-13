@@ -4,27 +4,35 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
-      - "--providers.docker.swarmMode=true"
       - "--providers.docker.exposedbydefault=false"
-      # HTTP / HTTPS entrypoints
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.websecure.address=:443"
-      # Let's Encrypt
+      # Setup Let's Encrypt certificates for HTTPS
+      - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=cmnemoi@askneron.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # Redirect HTTP to HTTPS
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - letsencrypt:/letsencrypt
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "letsencrypt:/letsencrypt"
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - emush_rag
 
   app:
     image: cmnemoi/emush_rag_api:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`askneron.com`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+    ports:
+    - mode: ingress
+      target: 8080
+      protocol: tcp
     env_file:
       - .env
     depends_on:
@@ -34,27 +42,31 @@ services:
       - emush_rag
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.app.rule=Host(`askneron.com`)"
-        - "traefik.http.routers.app.entrypoints=websecure"
-        - "traefik.http.routers.app.tls.certresolver=myresolver"
-        - "traefik.http.services.app.loadbalancer.server.port=8080"
-        - "traefik.docker.network=emush_rag"
-      restart_policy:
-        condition: on-failure
 
   vector_store:
     image: chromadb/chroma:1.0.15
+    ports:
+    - mode: ingress
+      target: 8000
+      protocol: tcp
     volumes:
-      - ./chroma:/data
+    - ./chroma:/data
+    restart: unless-stopped
     networks:
       - emush_rag
-    restart: unless-stopped
 
   jaeger:
     image: jaegertracing/all-in-one:1.71.0
+    ports:
+    - mode: ingress
+      target: 4317
+      protocol: tcp
+    - mode: ingress
+      target: 4318
+      protocol: tcp
+    - mode: ingress
+      target: 9411
+      protocol: tcp
     environment:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
     networks:
@@ -63,6 +75,15 @@ services:
 
   grafana:
     image: cmnemoi/emush_rag_grafana:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.askneron.com`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+    ports:
+    - mode: ingress
+      target: 3000
+      protocol: tcp
     volumes:
       - grafana-data:/var/lib/grafana
     env_file:
@@ -72,14 +93,6 @@ services:
     networks:
       - emush_rag
     restart: unless-stopped
-    deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.grafana.rule=Host(`grafana.askneron.com`)"
-        - "traefik.http.routers.grafana.entrypoints=websecure"
-        - "traefik.http.routers.grafana.tls.certresolver=myresolver"
-        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-        - "traefik.docker.network=emush_rag"
 
 networks:
   emush_rag:
