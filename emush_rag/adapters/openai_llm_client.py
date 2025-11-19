@@ -1,42 +1,22 @@
-from dataclasses import dataclass
-from typing import List, Literal
-
 from openai import OpenAI
-from openai.types.chat import (
-    ChatCompletionMessageParam,
-    ChatCompletionSystemMessageParam,
-    ChatCompletionUserMessageParam,
-)
 
 from emush_rag.ports.llm_client import ChatMessage, LLMClient
 
 
-@dataclass
-class FormattedMessage:
-    role: Literal["system", "user"]
-    content: str
-
-    def to_dict(self) -> ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam:
-        if self.role == "system":
-            return {"role": "system", "content": self.content}
-        return {"role": "user", "content": self.content}
-
-
 class OpenAILLMClient(LLMClient):
-    SEED = 42
     TEMPERATURE = 0
 
     def __init__(self, model: str):
         self.client = OpenAI()
         self.model = model
 
-    def complete(self, system_prompt: str, messages: List[ChatMessage]) -> str:
-        formatted_messages = self._format_messages(system_prompt, messages)
-        return self._get_completion_response(formatted_messages)
+    def complete(self, system_prompt: str, messages: list[ChatMessage]) -> str:
+        instructions, user_input = self._format_messages(system_prompt, messages)
+        return self._get_response(instructions, user_input)
 
-    def _format_messages(self, system_prompt: str, messages: List[ChatMessage]) -> List[ChatCompletionMessageParam]:
+    def _format_messages(self, system_prompt: str, messages: list[ChatMessage]) -> tuple[str, str]:
         if not messages:
-            return []
+            return system_prompt, ""
 
         context = ""
         question = ""
@@ -48,21 +28,22 @@ class OpenAILLMClient(LLMClient):
             elif role == "last_user":
                 question = msg.content
 
-        return self._create_formatted_messages(system_prompt, context, question)
+        instructions = system_prompt.format(context=context)
+        return instructions, question
 
-    def _get_completion_response(self, formatted_messages: List[ChatCompletionMessageParam]) -> str:
-        response = self.client.chat.completions.create(
+    def _get_response(self, instructions: str, user_input: str) -> str:
+        response = self.client.responses.create(
             model=self.model,
-            messages=formatted_messages,
+            instructions=instructions,
+            input=user_input,
             temperature=self.TEMPERATURE,
-            seed=self.SEED,
         )
-        if not response.choices[0].message.content:
+        if not response.output_text:
             raise ValueError("No response content received from OpenAI")
 
-        return response.choices[0].message.content
+        return response.output_text
 
-    def _classify_message_role(self, message: ChatMessage, messages: List[ChatMessage]) -> str:
+    def _classify_message_role(self, message: ChatMessage, messages: list[ChatMessage]) -> str:
         if message.role == "system":
             return "system"
         if message.role == "assistant":
@@ -70,17 +51,3 @@ class OpenAILLMClient(LLMClient):
         if message.role == "user":
             return "last_user" if message == messages[-1] else "chat_user"
         return "unknown"
-
-    def _create_formatted_messages(
-        self, system_prompt: str, context: str, question: str
-    ) -> List[ChatCompletionMessageParam]:
-        system_message = FormattedMessage(
-            role="system",
-            content=system_prompt.format(context=context),
-        )
-        user_message = FormattedMessage(
-            role="user",
-            content=question,
-        )
-
-        return [system_message.to_dict(), user_message.to_dict()]
