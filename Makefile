@@ -15,6 +15,7 @@ check-types:
 	uv run mypy .
 
 index-documents:
+	mush-wikis-scrap > data/wikis.json
 	rm -rf chroma
 	uv run emush_rag/cli/index_documents.py
 	scp -r ./chroma cmnemoi@askneron.com:~/www/new_chroma
