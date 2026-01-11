@@ -20,7 +20,7 @@ index-documents:
 	uv run emush_rag/cli/index_documents.py
 	scp -r ./chroma cmnemoi@askneron.com:~/www/new_chroma
 	ssh cmnemoi@askneron.com "rm -rf ~/www/chroma && mv ~/www/new_chroma ~/www/chroma && rm -rf ~/www/new_chroma"
-	ssh cmnemoi@askneron.com "cd ~/www && env $(cat .env) docker stack deploy -c compose.prod.yml emush_rag_api"
+	ssh cmnemoi@askneron.com "cd ~/www && env $(cat .env) docker service update --force emush_rag_api_vector_store"
 
 install:
 	uv lock
