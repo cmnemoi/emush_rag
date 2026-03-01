@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/cmnemoi/emush-rag-api:${IMAGE_TAG:-latest}
+    image: ghcr.io/cmnemoi/emush-rag/api:${IMAGE_TAG:-latest}
     labels:
       - traefik.enable=true
       - traefik.http.routers.app.rule=Host(`api.askneron.cmnemoi.com`)
@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: ghcr.io/cmnemoi/emush-rag-grafana:${IMAGE_TAG:-latest}
+    image: ghcr.io/cmnemoi/emush-rag/grafana:${IMAGE_TAG:-latest}
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`grafana.askneron.cmnemoi.com`)

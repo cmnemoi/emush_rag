@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  APP_IMAGE: ghcr.io/emush-rag-api
-  GRAFANA_IMAGE: ghcr.io/emush-rag-grafana
+  APP_IMAGE: ghcr.io/${{ github.repository }}/api
+  GRAFANA_IMAGE: ghcr.io/${{ github.repository }}/grafana
 
 jobs:
   build-and-push:
