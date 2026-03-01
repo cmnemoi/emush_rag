@@ -24,8 +24,6 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://askneron.netlify.app",
-        "https://emush.eternaltwin.org",
-        "https://staging.emush.eternaltwin.org",
         "http://localhost:5173",
     ],
     allow_credentials=False,
