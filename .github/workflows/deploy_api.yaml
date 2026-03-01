@@ -94,6 +94,7 @@ jobs:
           host: ${{ vars.SERVER_HOST }}
           username: ${{ vars.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ vars.SERVER_SSH_PORT }}
           script: |
             set -euo pipefail
             cd ~/www
