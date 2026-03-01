@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  APP_IMAGE: ghcr.io/emush_rag_api
-  GRAFANA_IMAGE: ghcr.io/emush_rag_grafana
+  APP_IMAGE: ghcr.io/emush-rag-api
+  GRAFANA_IMAGE: ghcr.io/emush-rag-grafana
 
 jobs:
   build-and-push:
@@ -43,6 +43,8 @@ jobs:
           tags: |
             ${{ env.APP_IMAGE }}:${{ steps.image-tag.outputs.value }}
             ${{ env.APP_IMAGE }}:latest
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,scope=app,mode=max
 
       - name: Build and push grafana image
         uses: docker/build-push-action@v6
@@ -53,6 +55,8 @@ jobs:
           tags: |
             ${{ env.GRAFANA_IMAGE }}:${{ steps.image-tag.outputs.value }}
             ${{ env.GRAFANA_IMAGE }}:latest
+          cache-from: type=gha,scope=grafana
+          cache-to: type=gha,scope=grafana,mode=max
 
   deploy:
     name: Deploy to server
