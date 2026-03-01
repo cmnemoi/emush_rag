@@ -8,8 +8,10 @@ services:
       - traefik.http.routers.app.entrypoints=websecure
       - traefik.http.routers.app.tls.certresolver=letsencrypt
       - traefik.http.services.app.loadbalancer.server.port=8080
-    env_file:
-      - .env
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VECTOR_STORE_URL=${VECTOR_STORE_URL}
+      - VECTOR_STORE_PORT=${VECTOR_STORE_PORT}
     depends_on:
       - vector_store
       - jaeger
@@ -47,8 +49,8 @@ services:
       - traefik.http.services.grafana.loadbalancer.server.port=3000
     volumes:
       - grafana-data:/var/lib/grafana
-    env_file:
-      - .env
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
     depends_on:
       - jaeger
     networks:
