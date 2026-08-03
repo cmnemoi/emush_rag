@@ -4,8 +4,6 @@ from emush_rag.ports.llm_client import ChatMessage, LLMClient
 
 
 class OpenAILLMClient(LLMClient):
-    TEMPERATURE = 0
-
     def __init__(self, model: str):
         self.client = OpenAI()
         self.model = model
@@ -36,7 +34,6 @@ class OpenAILLMClient(LLMClient):
             model=self.model,
             instructions=instructions,
             input=user_input,
-            temperature=self.TEMPERATURE,
         )
         if not response.output_text:
             raise ValueError("No response content received from OpenAI")
